@@ -173,7 +173,8 @@ namespace WebApiThrottle
                 if (rateLimit > 0)
                 {
                     // increment counter
-                    var requestId = ComputeThrottleKey(identity, rateLimitPeriod);
+                    var requestId = ComputeThrottleKey(identity, rateLimitPeriod,
+                        ThrottlingBy.ClientThrottling | ThrottlingBy.EndpointThrottling | ThrottlingBy.IpThrottling);
                     var throttleCounter = core.ProcessRequest(timeSpan, requestId);
 
                     // check if key expired
@@ -225,9 +226,10 @@ namespace WebApiThrottle
             return entry;
         }
 
-        protected virtual string ComputeThrottleKey(RequestIdentity requestIdentity, RateLimitPeriod period)
+        protected virtual string ComputeThrottleKey(RequestIdentity requestIdentity, RateLimitPeriod period,
+            ThrottlingBy throttlingBy)
         {
-            return core.ComputeThrottleKey(requestIdentity, period);
+            return core.ComputeThrottleKey(requestIdentity, period, throttlingBy);
         }
     }
 }

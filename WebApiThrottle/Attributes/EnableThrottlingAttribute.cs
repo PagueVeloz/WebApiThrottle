@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,7 +18,9 @@ namespace WebApiThrottle
 
         public long PerWeek { get; set; }
 
-        public virtual long GetLimit(RateLimitPeriod period)
+        public ThrottlingBy ThrottlingBy { get; set; } = ThrottlingBy.IpThrottling | ThrottlingBy.EndpointThrottling | ThrottlingBy.ClientThrottling;
+
+    public virtual long GetLimit(RateLimitPeriod period)
         {
             switch (period)
             {

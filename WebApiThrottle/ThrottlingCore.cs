@@ -116,24 +116,24 @@ namespace WebApiThrottle
             return false;
         }
 
-        internal string ComputeThrottleKey(RequestIdentity requestIdentity, RateLimitPeriod period)
+        internal string ComputeThrottleKey(RequestIdentity requestIdentity, RateLimitPeriod period, ThrottlingBy throttlingBy)
         {
             var keyValues = new List<string>()
                 {
                     ThrottleManager.GetThrottleKey()
                 };
 
-            if (Policy.IpThrottling)
+            if (Policy.IpThrottling && throttlingBy.HasFlag(ThrottlingBy.IpThrottling))
             {
                 keyValues.Add(requestIdentity.ClientIp);
             }
 
-            if (Policy.ClientThrottling)
+            if (Policy.ClientThrottling && throttlingBy.HasFlag(ThrottlingBy.ClientThrottling))
             {
                 keyValues.Add(requestIdentity.ClientKey);
             }
 
-            if (Policy.EndpointThrottling)
+            if (Policy.EndpointThrottling && throttlingBy.HasFlag(ThrottlingBy.EndpointThrottling))
             {
                 keyValues.Add(requestIdentity.Endpoint);
             }
