@@ -20,6 +20,12 @@ namespace WebApiThrottle.Net
             // Always return all zeroes for any failure (my calling code expects it)
             string ipAddress = "0.0.0.0";
 
+            IEnumerable<string> ips;
+            if (request.Headers.TryGetValues("True-Client-Ip", out ips))
+            {
+                return ips.FirstOrDefault();
+            }
+            
             if (request.Properties.ContainsKey("MS_HttpContext"))
             {
                 ipAddress = ((HttpContextBase)request.Properties["MS_HttpContext"]).Request.UserHostAddress;
